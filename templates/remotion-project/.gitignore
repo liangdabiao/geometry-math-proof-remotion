@@ -1,0 +1,44 @@
+# Node / Remotion
+node_modules/
+build/
+.cache/
+out/
+
+# Render 输出
+renders/
+*.mp4
+*.webm
+*.mov
+
+# 静态资产(运行时生成)
+public/assets/audio/
+public/assets/article-images/
+work/audio/generated/
+work/captions/captions_aligned.json
+work/captions/captions.srt
+work/source/article.md
+work/source/images.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 凭据 & 环境
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

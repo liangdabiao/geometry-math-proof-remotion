@@ -1,0 +1,4 @@
+# 此目录由 fetch_article.py 自动创建
+#   work/source/article.md   抓回来的 markdown 原文
+#   work/source/images.json  图片清单(含宽高比)
+# 真正的稿子(分章节 + LINES)放在 script.md,自己写

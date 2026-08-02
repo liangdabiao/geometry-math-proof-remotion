@@ -1,0 +1,4 @@
+# 此目录由 scripts/generate_tts.py 自动创建
+# 字幕时间轴输出:
+#   work/captions/captions_aligned.json   Remotion 时间轴来源
+#   work/captions/captions.srt            标准 SRT 字幕
