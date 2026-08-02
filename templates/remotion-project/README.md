@@ -25,12 +25,24 @@ npm install
 
 ⚠️ 用原生 `npm install`,**不要** `rtk npm install`(`rtk` 会翻译成 `npm run install` 报错)。
 
-### 2. 配置 TTS 凭据
+### 2. 配置 TTS 凭据(可选)
 
 ```bash
 cp .env.example .env
-# 编辑 .env 填入 MiniMax API Key
-# 获取:https://api.minimaxi.com → 控制台 → API Keys
+```
+
+默认用 **edge 免费方案**,无需任何 API Key,只要能联网即可。
+
+如果要切换到 MiniMax 高质量方案,编辑 `.env`:
+```bash
+TTS_PROVIDER=minimax
+minimaxi=your_api_key_here  # 获取:https://api.minimaxi.com 控制台
+```
+
+或运行时命令行覆盖:
+```bash
+python scripts/generate_tts.py --provider edge      # 免费
+python scripts/generate_tts.py --provider minimax   # 高质量(需 key)
 ```
 
 ### 3. 准备稿子
@@ -51,8 +63,24 @@ LINES = [
 
 ```bash
 pip install -r requirements.txt  # 第一次需要
+
+# 默认 auto: 有 minimaxi 配 → 用 MiniMax,否则用 edge(免费)
 python scripts/generate_tts.py
+
+# 强制指定
+python scripts/generate_tts.py --provider edge
+python scripts/generate_tts.py --provider minimax
+
+# 列出 edge 可用中文 voice
+python scripts/generate_tts.py --list-voices
 ```
+
+**TTS Provider 对比**:
+
+| Provider | 成本 | 质量 | 需要 |
+|---|---|---|---|
+| **edge**(默认) | 免费 | 高(微软神经网络) | 联网 |
+| **minimax** | 付费 | 高(MiniMax speech-2.8-hd) | API Key + 联网 |
 
 产出:
 - `public/assets/audio/voice.mp3` — 整段配音
@@ -234,7 +262,9 @@ Config.setBrowserExecutable('/usr/bin/google-chrome');
 
 ### 跑 TTS 时报 "未找到 MiniMax API Key"
 
-确认 `.env` 在项目根目录,且 `minimaxi=<your-key>` 格式正确(无空格包裹 key)。
+只在指定 `--provider minimax` 时才需要填 key。默认用 edge 无需 key。
+
+要切换到 MiniMax:在 `.env` 配 `minimaxi=<your-key>`,或命令行加 `--provider minimax`。
 
 ### `npm run render` 报 TS 错误
 

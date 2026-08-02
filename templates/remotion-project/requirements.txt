@@ -4,3 +4,6 @@
 # 微信公众号文章 → markdown (fetch_article.py)
 requests>=2.31.0
 Pillow>=10.0.0
+
+# TTS — 默认 edge-tts 免费方案
+edge-tts>=7.0.0

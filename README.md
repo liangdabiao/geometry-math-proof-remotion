@@ -135,9 +135,28 @@ cp .env.example .env
 ### 4. 跑 TTS + 回写时间轴
 
 ```bash
-# 修改 scripts/generate_tts.py 的 LINES 列表
+# 默认自动选择:有 minimaxi=xxx 配 → 用 MiniMax(高质量),否则用 edge(免费)
 python scripts/generate_tts.py
+
+# 强制指定 provider
+python scripts/generate_tts.py --provider edge       # edge 免费
+python scripts/generate_tts.py --provider minimax    # MiniMax(需 .env 中配 minimaxi=)
+
+# 列出 edge 可用中文 voice
+python scripts/generate_tts.py --list-voices
 ```
+
+**TTS Provider 选择**:
+
+| Provider | 成本 | 质量 | 联网 | 适用场景 |
+|---|---|---|---|---|
+| **edge**(默认) | 免费 | 高(微软神经网络) | 必需 | 快速出片、零成本、测试稿 |
+| **minimax** | 付费 | 高(MiniMax speech-2.8-hd) | 必需 | 成片、对音色有特定要求 |
+
+- **edge(默认免费)**:基于 Microsoft Edge 在线 TTS(`edge-tts` Python 库)。无需 API Key,需联网。中文推荐 `zh-CN-XiaoxiaoNeural`(晓晓,女声)或 `zh-CN-YunyangNeural`(云扬,男声新闻/旁白风)。在 `.env` 设 `EDGE_VOICE=...` 或命令行 `--edge-voice ...`。
+- **MiniMax(可选)**:基于 `speech-2.8-hd`,音色 `moss_audio_2ecaeaac-5e5a-11f1-99fb-96e792fde6a1`,需在 `.env` 配 `minimaxi=<your-key>`。
+
+**自动 fallback 规则**:`--provider` 命令行 > `.env` 中 `TTS_PROVIDER` > 有 `minimaxi=xxx` 配 → minimax > 默认 edge。
 
 产出:
 - `public/assets/audio/voice.mp3` — 整段配音
@@ -204,8 +223,15 @@ Pillow>=10.0.0
 ### 环境变量(`.env`)
 
 ```bash
-# MiniMax TTS API Key,获取:https://api.minimaxi.com 控制台
+# === TTS Provider 开关(可选 edge|minimax,默认 auto) ===
+TTS_PROVIDER=edge
+
+# === MiniMax TTS API Key(可选,不填自动用 edge 免费方案) ===
+# 获取:https://api.minimaxi.com 控制台
 minimaxi=your_api_key_here
+
+# === Edge TTS voice(可选,默认 zh-CN-XiaoxiaoNeural) ===
+EDGE_VOICE=zh-CN-XiaoxiaoNeural
 ```
 
 ---
@@ -269,7 +295,7 @@ minimaxi=your_api_key_here
 | 字幕 | 底部 110px 字幕条,关键词 `tone:'accent'` 黄色加粗高亮 |
 | 公式 | 右侧 700×820 面板,逐步揭示;最终结论用黄框大字(`tone:'result'`) |
 | 素材 | 全部代码绘制,不用任何位图/图标库/emoji |
-| 配音 | MiniMax `speech-2.8-hd`,voice_id `moss_audio_2ecaeaac-5e5a-11f1-99fb-96e792fde6a1`,1.2x 语速 |
+| 配音 | 默认 edge-tts(`zh-CN-XiaoxiaoNeural` 晓晓),1.2x 语速。可选 MiniMax `speech-2.8-hd`,voice_id `moss_audio_2ecaeaac-5e5a-11f1-99fb-96e792fde6a1` |
 
 ---
 

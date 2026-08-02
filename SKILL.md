@@ -27,10 +27,26 @@ description: 用 Remotion 制作数学证明/几何动画视频:深底高饱和 
    后续写 LINES 时用这张表防止把证明压成"口播三句话完事"。
 
 3. **写 LINES,跑 TTS**。打开 `scripts/generate_tts.py`,把 LINES 替换成本证明的章节台词。每行 `{"id", "chapter", "text"}`。运行:
+
    ```bash
+   # 默认自动选择:有 minimaxi=xxx 配 → 用 MiniMax(高质量),否则用 edge(免费)
    python scripts/generate_tts.py
+
+   # 强制指定 provider
+   python scripts/generate_tts.py --provider edge       # edge 免费
+   python scripts/generate_tts.py --provider minimax    # MiniMax(需 .env 中配 minimaxi=)
+
+   # 列出 edge 可用中文 voice
+   python scripts/generate_tts.py --list-voices
    ```
+
    产出 `public/assets/audio/voice.mp3`、`work/captions/captions_aligned.json`、`work/captions/captions.srt`。
+
+   **TTS Provider 选择**:
+   - **edge(默认免费)**:基于 Microsoft Edge 在线 TTS,无需 API Key,需联网。中文推荐 `zh-CN-XiaoxiaoNeural`(晓晓,女声)或 `zh-CN-YunyangNeural`(云扬,男声新闻/旁白风)。在 .env 设 `EDGE_VOICE=...` 或命令行 `--edge-voice ...`。
+   - **MiniMax(可选)**:基于 `speech-2.8-hd`,音色 `moss_audio_2ecaeaac-5e5a-11f1-99fb-96e792fde6a1`,需在 .env 配 `minimaxi=<your-key>`。质量更好但需付费。
+
+   自动 fallback 规则:`--provider` 命令行 > `.env` 中 `TTS_PROVIDER` > 有 `minimaxi=xxx` 配 → minimax > 默认 edge。
 
 4. **回写 F 时间轴**。从 `captions_aligned.json` 的 `lines` 拿每章末帧,写到 `src/geometry.tsx` 的 `F` 对象。同步把 `Root.tsx` 的 `durationInFrames` 改成 `total_frames`。**不要停留在无配音估时版本**。
 
@@ -81,7 +97,7 @@ description: 用 Remotion 制作数学证明/几何动画视频:深底高饱和 
 | 字幕 | 底部 110px 字幕条,关键词 `tone:'accent'` 用黄色加粗高亮 |
 | 公式 | 右侧 700×820 面板,逐步揭示;最终结论用黄框大字 (`tone:'result'`) |
 | 素材 | 全部代码绘制,不用任何位图/图标库/emoji |
-| 配音 | MiniMax `speech-2.8-hd`,voice_id `moss_audio_2ecaeaac-5e5a-11f1-99fb-96e792fde6a1`,1.2x 语速 |
+| 配音 | 默认 edge-tts(`zh-CN-XiaoxiaoNeural`),1.2x 语速。可选 MiniMax `speech-2.8-hd`,voice_id `moss_audio_2ecaeaac-5e5a-11f1-99fb-96e792fde6a1` |
 
 ## 章节版式约定
 
