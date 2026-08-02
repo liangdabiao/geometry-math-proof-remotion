@@ -386,3 +386,5 @@ python scripts/fetch_article.py \
 
 本 skill 的代码部分(MIT):可自由使用、修改、分发。
 视频成片版权归作者所有,使用时请遵守源证明文档的版权要求。
+
+感谢 https://linux.do 社区支持
